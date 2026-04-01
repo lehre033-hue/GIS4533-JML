@@ -29,15 +29,16 @@
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style></style>
+    <style>body{width: 900px; height: 900px;} #map{width: 90%; height: 90%; }</style>
 </head>
 <body>
     <!-- Header at the top of the page -->
-    <div class="header">
+    <div class="header"> <style>h1{font-family: fantasy; color: cornflowerblue};</style>
         <h1>Jared's Favorite Places in Duluth, MN</h1>
+        
         <h3>by: Jared Lehrer</h3>
     </div>
-    <div id="map" style="width: 600px; height: 400px;"></div>
+    <div id="map"></div>
     
     <!-- Leaflet JavaScript library -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -47,14 +48,39 @@
         const map = L.map('map').setView([46.82, -92.08], 13);
 
         // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+       var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+	maxZoom: 20
+});
+// actually add the tiles to the map
+CartoDB_Voyager.addTo(map);
 
         // Add a marker for the UMD campus
         const marker = L.marker([46.82, -92.085]).addTo(map);
-        marker.bindPopup("<b>University of Minnesota Duluth</b><br>A great place to learn about GIS!").openPopup();
+        //  the HTML content for my popup
+        const htmlContent = `
+        <div>
+            <h4>Aerial Photo of University of Minnesota Duluth</h4>
+            <img width=295 height=150 src="https://admissions.d.umn.edu/sites/admissions.d.umn.edu/files/2024-08/aerial_view_umd_campus.png">
+            <em>Photo courtesy of UMD Admissions Office</em>
+        </div>
+    `;
+
+        marker.bindPopup("<b>University of Minnesota Duluth</b><br>A great place to learn about GIS!"+ htmlContent)
+            marker.openPopup();
+
+const pierMarker = L.marker([46.779971, -92.091187]).addTo(map);
+
+const pierPopupContent = `
+<div>
+    <h3>Duluth Shipping Pier</h3>
+    <p>Best place to watch ships come into Duluth!</p>
+</div>
+`;
+
+pierMarker.bindPopup(pierPopupContent);
+
     </script>
 </body>
 </html>
