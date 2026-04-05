@@ -29,7 +29,7 @@
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style>body{width: 900px; height: 900px;} #map{width: 90%; height: 90%; }</style>
+    <style>body{width: 850px; height: 850px;} #map{width: 80%; height: 80%; }</style>
 </head>
 <body>
     <!-- Header at the top of the page -->
@@ -80,6 +80,23 @@ const pierPopupContent = `
 `;
 
 pierMarker.bindPopup(pierPopupContent);
+
+const marker2 = L.marker([46.665147, -92.226848]).addTo(map);
+
+const popupContent2 = `
+<div>
+<h3>Gary New Duluth Skatepark</h3>
+<p>This skatepark was designed by nationally recognized skate park designer Mark Leski, aka “The Wizard”.</p>
+
+<img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweq-RgauqywJz10Cmc_EeJnRdPD674JbW_EV8r11wvlsdmALJdIgcE1cWIbF7jLwffT6rgLT3S7ZnlHR5GdpzpEKvPPI_1qWUwdaU6VzP98Kunam035MxluUGQjB0_5dd-fRYoO03__ZD46d=w408-h271-k-no" width="250">
+<br>
+<em>Photo credit: GND REC</em>
+</div>
+`;
+
+marker2.bindPopup(popupContent2);
+
+
 
     </script>
 </body>
