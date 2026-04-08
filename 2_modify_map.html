@@ -29,9 +29,11 @@
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
+// here I was styling my body, containerizing it and thne centering it on the page with a border to match my title
+
 <style>
 html, body {
-    margin: 0;           /* remove default white space */
+    margin: 0;           
     padding: 0;
     width: 100%;
     height: 90%;
@@ -39,21 +41,20 @@ html, body {
 }
 
 .container {
-    width: 100%;         /* take full width */
-    min-height: 100vh;   /* fill at least the full viewport height */
-    padding: 20px;       /* some space around edges */
+    width: 100%;         
+    min-height: 100vh;  
+    padding: 20px;       
     box-sizing: border-box;
 }
 
 #map {
-    width: 100%;         /* fill the container horizontally */
-    height: 70vh;        /* fill 70% of viewport height */
-    border: 3px solid cornflowerblue; /* border */
+    width: 100%;         
+    height: 70vh;       
+    border: 3px solid cornflowerblue;
 }
 
-/* CENTER HEADER, SUBTITLE, AND PARAGRAPH */
 .header, .description {
-    text-align: center;      /* center all text inside these divs */
+    text-align: center;      
 }
 
 .header h1 {
@@ -71,12 +72,15 @@ html, body {
     font-size: 16px;
     line-height: 1.5;
     margin-bottom: 20px;
-    max-width: 800px;       /* optional: paragraph not too wide */
+    max-width: 800px;       
     margin-left: auto;
-    margin-right: auto;     /* center the paragraph */
+    margin-right: auto; 
 }
 
 </style>
+
+// I changed the title header to reflect the maps purpose and the subtitle as well
+// I also added a description div with a paragraph describing my maps purpose
 
 </head>
 <body>
@@ -112,7 +116,9 @@ html, body {
 });
 
 
-// actually add the tiles to the map
+// actually add the tiles to the map and then begin adding markers with different words in front to distinguish them so they each show up individually and have their own unique marker ID
+// each marker has a location (coordinates) and a title and a description as well as a link to a photo address with a given image height and width
+
 CartoDB_Voyager.addTo(map);
 
         // Add a marker for the UMD campus
