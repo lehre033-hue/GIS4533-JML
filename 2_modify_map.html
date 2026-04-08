@@ -29,30 +29,89 @@
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style>body{width: 850px; height: 850px;} #map{width: 80%; height: 80%; }</style>
+<style>
+html, body {
+    margin: 0;           /* remove default white space */
+    padding: 0;
+    width: 100%;
+    height: 90%;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 100%;         /* take full width */
+    min-height: 100vh;   /* fill at least the full viewport height */
+    padding: 20px;       /* some space around edges */
+    box-sizing: border-box;
+}
+
+#map {
+    width: 100%;         /* fill the container horizontally */
+    height: 70vh;        /* fill 70% of viewport height */
+    border: 3px solid cornflowerblue; /* border */
+}
+
+/* CENTER HEADER, SUBTITLE, AND PARAGRAPH */
+.header, .description {
+    text-align: center;      /* center all text inside these divs */
+}
+
+.header h1 {
+    font-family: fantasy;
+    color: cornflowerblue;
+    margin-bottom: 5px;
+}
+
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.description p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    max-width: 800px;       /* optional: paragraph not too wide */
+    margin-left: auto;
+    margin-right: auto;     /* center the paragraph */
+}
+
+</style>
+
 </head>
 <body>
     <!-- Header at the top of the page -->
-    <div class="header"> <style>h1{font-family: fantasy; color: cornflowerblue};</style>
+    <div class="header">
         <h1>Jared's Favorite Places in Duluth, MN</h1>
         
         <h3>by: Jared Lehrer</h3>
     </div>
+
+<div class="description">
+    <p>
+        This map shows some of my favorite places in Duluth, MN.
+        I have added markers for the University of Minnesota Duluth campus, the Duluth Shipping Pier, Gary New Duluth Skatepark, the Hawk Ridge Nature Reserve, the Lake Superior Railroad Museum, and Enger Tower. Each marker has a popup with a photo and a fun fact about the location. 
+    </p>
+</div>
+
     <div id="map"></div>
     
     <!-- Leaflet JavaScript library -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Initialize the map, center it on UMD campus, and set the zoom level
-        const map = L.map('map').setView([46.82, -92.08], 13);
-
+        // Initialize the map, center it on Duluth MN, and set the zoom level to see all my markers
+            const map = L.map('map').setView([46.79, -92.08], 11);
         // Add OpenStreetMap tiles
+
+// Add OpenStreetMap tiles
        var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 	subdomains: 'abcd',
 	maxZoom: 20
 });
+
+
 // actually add the tiles to the map
 CartoDB_Voyager.addTo(map);
 
@@ -68,7 +127,7 @@ CartoDB_Voyager.addTo(map);
     `;
 
         marker.bindPopup("<b>University of Minnesota Duluth</b><br>A great place to learn about GIS!"+ htmlContent)
-            marker.openPopup();
+         ;
 
 const pierMarker = L.marker([46.779971, -92.091187]).addTo(map);
 
@@ -76,9 +135,12 @@ const pierPopupContent = `
 <div>
     <h3>Duluth Shipping Pier</h3>
     <p>Best place to watch ships come into Duluth!</p>
+
+    <img width="295" height="150" src="https://visitduluth.com/wp-content/uploads/2024/03/DLTH21_FallShoot-MH_LiftBridgeArea_43-scaled.jpg">
+    <br>
+    <em>Photo courtesy of Visit Duluth</em>
 </div>
 `;
-
 pierMarker.bindPopup(pierPopupContent);
 
 const marker2 = L.marker([46.665147, -92.226848]).addTo(map);
@@ -88,15 +150,57 @@ const popupContent2 = `
 <h3>Gary New Duluth Skatepark</h3>
 <p>This skatepark was designed by nationally recognized skate park designer Mark Leski, aka “The Wizard”.</p>
 
-<img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweq-RgauqywJz10Cmc_EeJnRdPD674JbW_EV8r11wvlsdmALJdIgcE1cWIbF7jLwffT6rgLT3S7ZnlHR5GdpzpEKvPPI_1qWUwdaU6VzP98Kunam035MxluUGQjB0_5dd-fRYoO03__ZD46d=w408-h271-k-no" width="250">
-<br>
+<img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweq-RgauqywJz10Cmc_EeJnRdPD674JbW_EV8r11wvlsdmALJdIgcE1cWIbF7jLwffT6rgLT3S7ZnlHR5GdpzpEKvPPI_1qWUwdaU6VzP98Kunam035MxluUGQjB0_5dd-fRYoO03__ZD46d=w408-h271-k-no" width=295 height=150
 <em>Photo credit: GND REC</em>
 </div>
 `;
 
 marker2.bindPopup(popupContent2);
 
+const hawkRidgeMarker = L.marker([46.847092, -92.031346]).addTo(map);
 
+const hawkRidgePopupContent = `
+<div>
+    <h3>Hawk Ridge</h3>
+    <p>Best place to watch migratory birds and get great views of Duluth's beautiful landscape!</p>
+
+    <img src="https://images.squarespace-cdn.com/content/v1/579214be8419c2b046a1e4d4/1646922076784-RDD72V7ZHVRQP0UGTWCT/IMG_0587.jpeg" width=295 height=150>
+    <br>
+    <em>Photo courtesy of Hawk Ridge Bird Observatory</em>
+</div>
+`;
+
+hawkRidgeMarker.bindPopup(hawkRidgePopupContent);
+
+const trainMuseumMarker = L.marker([46.781189, -92.103586]).addTo(map);
+
+const trainMuseumPopupContent = `
+<div>
+    <h3>Lake Superior Railroad Museum</h3>
+    <p>Here you can explore the impressive collection of historic railroad equipment that built Minnesota and our country.</p>
+
+    <img src="https://lsrm.org/wp-lib/wp-content/uploads/2018/02/sidebar7-1-1024x685.jpg" style="width:100%; height:auto;">
+    <br>
+    <em>Photo courtesy of Lake Superior Railroad Museum</em>
+</div>
+`;
+
+trainMuseumMarker.bindPopup(trainMuseumPopupContent, { maxWidth: 260 });
+
+const engerTowerMarker = L.marker([46.77611, -92.12468]).addTo(map);
+
+const engerTowerPopupContent = `
+<div>
+    <h3>Enger Tower</h3>
+    <p>Enger Tower is a historic 80-foot, five-story blue stone observation tower in Duluth, MN, built in 1939 to honor philanthropist Bert Enger.</p>
+
+    <img src="https://visitduluth.com/wp-content/uploads/2023/10/DLTH_Web_TwoColumn_580x400_Weddings-EngerTower.jpg" style="width:100%; height:auto;">
+    <br>
+    <em>Photo courtesy of Visit Duluth</em>
+</div>
+`;
+
+engerTowerMarker.bindPopup(engerTowerPopupContent, { maxWidth: 260 });
 
     </script>
 </body>
