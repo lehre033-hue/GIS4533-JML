@@ -51,12 +51,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Most Basic Web Map</title>
+    <title>Duluth School Attendance Map Jared</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style></style>
+    <style>
+    /* Page layout */
+    body {
+        margin: 0;
+        /*removes default margin so the map fills the page/browser window fully*/
+        font-family: Arial, sans-serif;
+        /*changes the font to a cleaner more readable one*/
+        background: #f5f5f5;
+        /*gives the page a light gray background color to make the map stand out more*/
+    }
+
+    /* Title area at top */
+    #title {
+        padding: 15px 20px;
+        /* adds space around the title for better readability*/
+        font-size: 20px;
+        /* makes the title text larger and more prominent*/
+        font-weight: bold;
+        /* makes the title text bold to draw attention*/
+        background: white;
+        /* gives the title area a white background to make it stand out from the page background*/
+        border-bottom: 1px solid #ddd;
+        /* adds a light gray border below the title to visually separate it from the map*/
+    }
+
+    /* Map container with margins */
+    #map {
+        width: calc(100vw - 40px);
+        /* makes the map take up the full width of the viewport minus 40px for margins*/
+        height: calc(100vh - 80px);
+        /* makes the map take up the full height of the viewport minus 80px for title and margins*/
+        margin: 20px;
+        /* adds a 20px margin around the map to prevent it from touching the edges of the page*/
+        border: 2px solid #ccc;
+        /* adds a light gray border around the map to give it definition and make it stand out*/
+        border-radius: 8px;
+        /* rounds the corners of the map container for a cleaner look*/
+    }
+</style>
+
+<div id="title">Duluth School Attendance Map</div>
+<div id="map"></div>
+
 </head>
 <body>
     <div id="map" style="width: 600px; height: 400px;"></div>
@@ -65,14 +107,45 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
-        // Initialize the map, center it on UMD campus, and set the zoom level
-        const map = L.map('map').setView([46.82, -92.08], 13);
+        // Initialize the map, center it on Duluth, and set the zoom level to 11
+        const map = L.map('map').setView([46.82, -92.08], 11);
 
         // Add OpenStreetMap tiles
         const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
+
+    // Function that generates a random hex fill color so the attendance areas are visually distinct from one another on the map.
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Load GeoJSON file from your repository and adds it to the map with custom styling.
+        fetch("./duluth_school_attendance_areas.json")
+            .then(response => response.json())
+            .then(geojsonData => {
+
+                // Draws the GeoJSON layer on map
+                L.geoJSON(geojsonData, {
+                    style: function (feature) {
+                        return {
+                            color: "black",          // border color
+                            weight: 1,               // border thickness
+                            fillColor: getRandomColor(), // random fill color
+                            fillOpacity: 0.5         // transparency
+                        };
+                    }
+                }).addTo(map);
+
+            })
+            .catch(error => console.error("GeoJSON failed to load:", error));
+
     </script>
 </body>
 </html>
