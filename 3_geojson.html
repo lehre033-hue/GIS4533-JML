@@ -52,71 +52,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duluth School Attendance Map Jared</title>
-    
+    <!-- title so that the web page has a title in the browser tab -->
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
     <style>
-    /* Page layout */
-    body {
-        margin: 0;
-        /*removes default margin so the map fills the page/browser window fully*/
-        font-family: Arial, sans-serif;
-        /*changes the font to a cleaner more readable one*/
-        background: #f5f5f5;
-        /*gives the page a light gray background color to make the map stand out more*/
-    }
+        /* Page layout */
+        body {
+            margin: 0; /* remove default margin around the page */
+            font-family: Arial, sans-serif; /* clean, modern font for readability */
+            background: #f5f5f5; /* light gray background for the whole page to create visual separation appeal */
+        }
 
-    /* Title area at top */
-    #title {
-        padding: 15px 20px;
-        /* adds space around the title for better readability*/
-        font-size: 20px;
-        /* makes the title text larger and more prominent*/
-        font-weight: bold;
-        /* makes the title text bold to draw attention*/
-        background: white;
-        /* gives the title area a white background to make it stand out from the page background*/
-        border-bottom: 1px solid #ddd;
-        /* adds a light gray border below the title to visually separate it from the map*/
-    }
+        /* Title area at top */
+        #title {
+            padding: 15px 20px; /* space around title text */
+            font-size: 20px; /* larger font size for title */
+            font-weight: bold; /*   make title bold */
+            background: white; /* white background for title area */
+            border-bottom: 1px solid #ddd; /* light gray border below title area */
+        }
 
-    /* Map container with margins */
-    #map {
-        width: calc(100vw - 40px);
-        /* makes the map take up the full width of the viewport minus 40px for margins*/
-        height: calc(100vh - 80px);
-        /* makes the map take up the full height of the viewport minus 80px for title and margins*/
-        margin: 20px;
-        /* adds a 20px margin around the map to prevent it from touching the edges of the page*/
-        border: 2px solid #ccc;
-        /* adds a light gray border around the map to give it definition and make it stand out*/
-        border-radius: 8px;
-        /* rounds the corners of the map container for a cleaner look*/
-    }
-</style>
+        /* Subtitle below title */
+        #subtitle {
+            font-size: 13px; /* smaller font size for subtitle */
+            font-weight: normal; /* normal weight for subtitle */
+            color: #666; /* lighter color for subtitle */
+            margin-top: 4px; /* space above subtitle */
+        }
 
-<div id="title">Duluth School Attendance Map</div>
-<div id="map"></div>
+        /* Description text below subtitle */
+        #description {
+            font-size: 13px; /* smaller font size for description */
+            font-weight: normal; /* normal weight for description */
+            color: #444; /* slightly darker color for better readability */
+            margin-top: 8px; /* space above description */
+            max-width: 800px; /* limit width for better readability */
+            line-height: 1.5; /* increase line spacing for readability */
+        }
 
+        /* Map container with margins */
+        #map {
+            width: calc(100vw - 40px);   /* full width of the browser window, minus 20px margin on each side */
+            height: calc(100vh - 200px); /* full height of the browser window, minus space for the title area above */
+            margin: 20px;                /* pushes the map 20px away from all edges of the page */
+            border: 2px solid #ccc;      /* draws a light gray border around the map */
+            border-radius: 8px;          /* rounds the corners of that border */
+}
+    </style>
 </head>
 <body>
-    <div id="map" style="width: 600px; height: 400px;"></div>
-    
+
+    <!-- Title inside div element so it can be styled. It also has a subtitle and description with page breaks and bolding for visual appeal.-->
+    <div id="title">
+        Duluth School Attendance Areas
+        <div id="subtitle">By: Jared Lehrer &nbsp;|&nbsp; Date: April 12, 2026</div>
+        <div id="description">
+            This interactive map displays the school attendance boundaries for the Duluth Public School District.
+            Each shaded area represents an assigned school zone within the district. The map was visualized using Leaflet.
+            Click on any attendance area to view the corresponding schools for that zone.<br>
+            <b>Source:</b> Minnesota Department of Education (MDE)
+        </div>
+    </div>
+
+    <!-- Map container -->
+    <div id="map"></div>
+
     <!-- Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
+
     <script>
         // Initialize the map, center it on Duluth, and set the zoom level to 11
         const map = L.map('map').setView([46.82, -92.08], 11);
 
-        // Add OpenStreetMap tiles
-        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+        // Stadia Alidade Smooth basemap — subdued, grayscale, minimalist style
+        var Stadia_AlidadeSmooth = L.tileLayer(
+            'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=edcf7be0-b390-4b30-bce2-781cae5254d6', {
+                minZoom: 0,
+                maxZoom: 20,
+                attribution: '&copy; <a href="https://www.stadiamaps.com/">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }
+        ).addTo(map);
 
-    // Function that generates a random hex fill color so the attendance areas are visually distinct from one another on the map.
+        // Function that generates a random hex fill color so attendance areas are visually distinct
         function getRandomColor() {
             var letters = '0123456789ABCDEF';
             var color = '#';
@@ -126,23 +145,36 @@
             return color;
         }
 
-        // Load GeoJSON file from your repository and adds it to the map with custom styling.
+        // Load GeoJSON file and add it to the map with custom styling and popups
         fetch("./duluth_school_attendance_areas.json")
             .then(response => response.json())
             .then(geojsonData => {
 
-                // Draws the GeoJSON layer on map
                 L.geoJSON(geojsonData, {
+
+                    // Style each attendance area with a random fill color
                     style: function (feature) {
                         return {
-                            color: "black",          // border color
-                            weight: 1,               // border thickness
-                            fillColor: getRandomColor(), // random fill color
-                            fillOpacity: 0.5         // transparency
+                            color: "black",              // border color
+                            weight: 1,                   // border thickness
+                            fillColor: getRandomColor(), // random fill color per feature
+                            fillOpacity: 0.5             // transparency
                         };
-                    }
-                }).addTo(map);
+                    },
 
+                    // Bind a popup to each area showing assigned schools when clicked, element names found in the duluth_school_attendance_areas.json file
+                    onEachFeature: function (feature, layer) {
+                        var props = feature.properties;
+                        var popupContent =
+                         "<b style='font-size:14px;'>Attendance Area Schools</b><br><br>" +
+                         "<b>Elementary:</b> " + props.ELEM_NAME + "<br>" +
+                         "<b>Middle:</b> " + props.MIDD_NAME + "<br>" +
+                         "<b>High:</b> " + props.HIGH_NAME;
+                        layer.bindPopup(popupContent);
+                    }
+                // adds the styled GeoJSON layer with popups to the map //
+                }).addTo(map);
+                    // catches any errors that occur during the fetch or processing of the GeoJSON data and logs them to the console for debugging //
             })
             .catch(error => console.error("GeoJSON failed to load:", error));
 
