@@ -68,8 +68,9 @@ html, body {
 
 <div class="description">
     <p>
-        Welcome to Duluth, Minnesota. This interactive map is designed to assist attendees of the FDI World Dental Congress 2026 in exploring notable attractions throughout the city. Each marker provides information, images, and details about popular local destinations.
+        Welcome to Duluth, Minnesota. This interactive map is designed to help attendees explore popular tourist attractions throughout the city.
         This resource is intended to help visitors make the most of their time in Duluth by providing a spatial representation of the experiences this city has to offer.
+        Click the blue markers on the map below to learn more about each point of interest. Each marker contains a location description, a photo, and a link to the attraction's website for more information. Enjoy your visit to Duluth!
     </p>
 </div>
 
@@ -98,7 +99,7 @@ L.tileLayer(
 
 async function getData() {
     return new Promise((resolve, reject) => {
-        Papa.parse('DuluthPOI2.csv', {
+        Papa.parse('DuluthPOIFinal.csv', {
             download: true,
             header: true,
             complete: (results) => {
