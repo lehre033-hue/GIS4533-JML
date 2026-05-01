@@ -1,5 +1,8 @@
+<!--This line begins the HTML document -->
 <!DOCTYPE html>
+<!--This line defines the HTML version -->
 <html lang="en">
+<!--This begins the head section containing the metadata and styles for my webpage-->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +11,10 @@
     <!-- Leaflet CSS stylesheet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <!-- PapaParse -->
+    <!-- PapaParse this is a JavaScript library for parsing my CSV file with my Points of Interest in it using Latitude/Longitude -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
+    <!-- Custom CSS styling for my body, container, map, headers, and descriptions. -->
 <style>
 html, body {
     margin: 0;           
@@ -19,7 +23,6 @@ html, body {
     height: 90%;
     font-family: 'Times New Roman', Times, serif;
 }
-
 .container {
     width: 100%;         
     min-height: 100vh;  
@@ -59,6 +62,8 @@ html, body {
 </style>
 </head>
 
+<!-- this line below begins the body section with my title and description -->
+
 <body>
 
 <div class="header">
@@ -76,12 +81,12 @@ html, body {
 
 <div id="map"></div>
 
-<!-- Leaflet JS -->
+<!-- Leaflet JS is a JavaScript library for creating interactive maps -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 
-// MAP INITIALIZATION
+// map initialization with the center of Duluth and a zoom level of 12 //
 
 const map = L.map('map').setView([46.7867, -92.1005], 12);
 
@@ -95,7 +100,7 @@ L.tileLayer(
     ext: 'jpg'
 }).addTo(map);
 
-// LOAD CSV DATA
+// LOAD CSV DATA and return it as a JavaScript object that I can use to create markers on the map. I am using PapaParse to read my CSV file and convert it into a format that I can work with in JavaScript. The function returns a promise that resolves with the parsed data when the parsing is complete.
 
 async function getData() {
     return new Promise((resolve, reject) => {
@@ -109,7 +114,7 @@ async function getData() {
     });
 }
 
-// CREATE MARKERS
+// Create markers and add them to the map. This function calls getData() to retrieve the parsed CSV data, then iterates through each row of the data. For each row that contains valid Latitude and Longitude values, it creates a marker on the map at the specified coordinates. Each marker is also bound with a popup that displays the attraction's name, description, photo, and a link to its website when clicked.
 
 async function loadPOIs() {
     const data = await getData();
@@ -134,7 +139,7 @@ async function loadPOIs() {
     });
 }
 
-// RUN
+// RUN the function to load the points of interest onto the map. This line calls the loadPOIs() function, which initiates the process of fetching the CSV data, creating markers for each point of interest, and adding them to the map with their respective popups.
 loadPOIs();
 
 </script>
