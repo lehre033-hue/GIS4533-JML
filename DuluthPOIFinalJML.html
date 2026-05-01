@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duluth Points of Interest for FDI World Dental Congress Attendees</title>
+    
+    <!-- Leaflet CSS stylesheet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- PapaParse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+<style>
+html, body {
+    margin: 0;           
+    padding: 0;
+    width: 100%;
+    height: 90%;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.container {
+    width: 100%;         
+    min-height: 100vh;  
+    padding: 20px;       
+    box-sizing: border-box;
+}
+
+#map {
+    width: 100%;         
+    height: 70vh;       
+    border: 3px solid black;
+}
+
+.header, .description {
+    text-align: center;      
+}
+
+.header h1 {
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(42, 116, 79);
+    margin-bottom: 5px;
+}
+
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.description p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    max-width: 700px;       
+    margin-left: auto;
+    margin-right: auto; 
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Duluth Points of Interest for FDI World Dental Congress Attendees</h1>
+    <h4>by: Jared Lehrer</h4>
+</div>
+
+<div class="description">
+    <p>
+        Welcome to Duluth, Minnesota. This interactive map is designed to assist attendees of the FDI World Dental Congress 2026 in exploring notable attractions throughout the city. Each marker provides information, images, and details about popular local destinations.
+        This resource is intended to help visitors make the most of their time in Duluth by providing a spatial representation of the experiences this city has to offer.
+    </p>
+</div>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+// MAP INITIALIZATION
+
+const map = L.map('map').setView([46.7867, -92.1005], 12);
+
+// Basemap
+L.tileLayer(
+'https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.{ext}?api_key=41db2904-39a2-49ee-a885-c295cf4c2cd6',
+{
+    minZoom: 0,
+    maxZoom: 20,
+    attribution: '&copy; Stadia Maps & OpenStreetMap contributors',
+    ext: 'jpg'
+}).addTo(map);
+
+// LOAD CSV DATA
+
+async function getData() {
+    return new Promise((resolve, reject) => {
+        Papa.parse('DuluthPOI2.csv', {
+            download: true,
+            header: true,
+            complete: (results) => {
+                resolve(results.data);
+            }
+        });
+    });
+}
+
+// CREATE MARKERS
+
+async function loadPOIs() {
+    const data = await getData();
+
+    data.forEach(row => {
+
+        if (row.Latitude && row.Longitude) {
+
+            L.marker([
+                parseFloat(row.Latitude),
+                parseFloat(row.Longitude)
+            ]).addTo(map)
+            .bindPopup(`
+                <h3>${row.Attraction}</h3>
+                <p>${row.Description}</p>
+                <img src="${row["Photo URL"]}" width="200">
+                <br>
+                <a href="${row.Website}" target="_blank">Website</a>
+            `);
+
+        }
+    });
+}
+
+// RUN
+loadPOIs();
+
+</script>
+
+</body>
+</html>
